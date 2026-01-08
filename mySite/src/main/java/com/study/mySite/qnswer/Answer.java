@@ -1,5 +1,7 @@
-package com.study.mySite;
+package com.study.mySite.qnswer;
 import java.time.LocalDateTime;
+
+import com.study.mySite.question.Question;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
