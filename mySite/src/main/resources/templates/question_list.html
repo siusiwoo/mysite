@@ -1,12 +1,32 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8" />
-	<title>Document</title>
-</head>
-<body>
-	<h1>질문 목록</h1>
-	Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis sequi saepe aut eos dolores. Deleniti id temporibus tempora earum magni animi rerum suscipit non provident porro alias ex nobis optio!
-	
-</body>
+<html layout:decorate="~{layout}">
+
+<div class="container" layout:fragment="content">
+	<div class="row">
+		<div class="col">
+			<div class="jumbotron">
+				<h1>질문 목록</h1>
+			</div>
+			<a th:href="@{/question/create}" class="btn btn-into my-3">질문 등록하기</a>
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th scope="col">번호</th>
+						<th scope="col">제목</th>
+						<th scope="col">작성일자</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="question, loop : ${questionList}">
+						<td>[[${loop.count}]]</td>
+						<td>
+							<a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}">db에 있는
+								제목</a>
+						</td>
+						<td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
 </html>
