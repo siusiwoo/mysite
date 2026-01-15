@@ -3,7 +3,7 @@ package com.study.mySite.question;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.study.mySite.qnswer.Answer;
+import com.study.mySite.answer.Answer;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

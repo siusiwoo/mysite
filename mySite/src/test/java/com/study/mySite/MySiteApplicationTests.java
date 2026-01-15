@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.study.mySite.qnswer.Answer;
-import com.study.mySite.qnswer.AnswerRepository;
+import com.study.mySite.answer.Answer;
+import com.study.mySite.answer.AnswerRepository;
 import com.study.mySite.question.Question;
 import com.study.mySite.question.QuestionRepository;
 
@@ -27,7 +27,7 @@ class MySiteApplicationTests {
 	@Autowired
 	private QuestionRepository questionRepository;
 	
-	@Transactional //db가 끊기지않고 끝까지 db섹션이 유지되도록 하는 에노테이션 
+	//@Transactional //db가 끊기지않고 끝까지 db섹션이 유지되도록 하는 에노테이션 
 	@Test
 	void contextLoads() {
 		/*
@@ -109,14 +109,21 @@ class MySiteApplicationTests {
 			q3.setCreateDate(LocalDateTime.now());
 			q3.setQuestion(question);
 			this.answerRepository.save(q3);
-		*/
+	
 		 Optional<Question> op = this.questionRepository.findById(5);
 		 assertTrue(op.isPresent());
 		 Question q = op.get();
 		 List<Answer> answerList = q.getAnswerList();
 		 System.out.println(answerList.get(0).getContent());
 		 System.out.println(answerList.size());
-		
+			*/
+		for(int i = 1; i <= 250;i++) {
+			 Question q1 = new Question();
+				q1.setSubject("테스트 코드를 이용해 생성한 내용:[내용"+i+"]");
+				q1.setContent("테스트 코드를 이용해 생성한 내용:[제목"+i+"]");
+				q1.setCreateDate(LocalDateTime.now());
+				this.questionRepository.save(q1);
+		}
 	}
 
 }

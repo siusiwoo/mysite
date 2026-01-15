@@ -1,4 +1,4 @@
-package com.study.mySite.qnswer;
+package com.study.mySite.answer;
 
 import java.time.LocalDateTime;
 

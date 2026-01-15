@@ -1,6 +1,4 @@
 <html layout:decorate="~{layout}">
-
-
 	<div class="container" layout:fragment="content">
 		<div class="row">
 			<div class="col">
@@ -30,8 +28,9 @@
 				</div>
 			</div>
 		</div>
-		<form th:action="@{|/answer/create/${question.id}|}" method="post">
-			<textarea name="content" id="" cols="30" rows="10" class="form-control"></textarea>
+		<form th:action="@{|/answer/create/${question.id}|}" method="post" th:object="${answerForm}">
+			<div th:replace="~{form_errors}"></div>
+			<textarea th:field="*{content}" cols="30" rows="10" class="form-control"></textarea>
 			<input type="submit" value="답변 등록" class="btn btn-warning my-3" />
 		</form>
 	</div>
