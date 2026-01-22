@@ -2,6 +2,7 @@ package com.study.mySite.answer;
 import java.time.LocalDateTime;
 
 import com.study.mySite.question.Question;
+import com.study.mySite.user.SiteUser;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,4 +28,9 @@ public class Answer {
 	
 	@ManyToOne //하나의 질문에 여러개의 답변
 	private Question question;
+	
+	@ManyToOne
+	private SiteUser author;
+	
+	private LocalDateTime modifyDate;
 }

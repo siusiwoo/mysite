@@ -9,11 +9,14 @@
 				<div class="card">
 					<div class="card-header">
 						질문 내용
+						<a th:href="@{|/question/modify/${question.id}|}" class="btn btn-info float-right" sec:authorize="isAuthenticated" th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}">수정</a>
+						<a href="javascript:void(0);" class="btn btn-danger float-right delete"  sec:authorize="isAuthenticated" th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+								th:data-uri="@{|/question/delete/${question.id}|}">삭제</a>
 					</div>
 					<div class="card-body">
 						<h5 class="card-title">[[${question.content}]]</h5>
 						<a href="#" class="btn btn-primary">[[${#temporals.format(question.createDate, 'yyyy년 MM월 dd일
-							HH시 mm분')}]]</a>
+							HH시 mm분')}]] <span th:if="${question.author}" th:text="${question.author.username}" class="badge bg-warning badge-pill p-2 ml-2"></span></a>
 					</div>
 				</div>
 			</div>
@@ -23,17 +26,36 @@
 			<div class="card-body">
 				[[${answer.content}]]
 				<div class="d-flex justify-content-end">
-					<span class="badge badge-pill badge-info p-2"> [[${#temporals.format(answer.createDate, 'yyyy년 MM월
-						dd일 HH시 mm분')}]]</span>
+					<a class="badge badge-pill badge-info p-2"> [[${#temporals.format(answer.createDate, 'yyyy년 MM월
+						dd일 HH시 mm분')}]] </a>
+						<span th:if="${question.author}" th:text="${question.author.username}" class="badge bg-warning badge-pill p-2 ml-2"></span>
 				</div>
 			</div>
 		</div>
+		
 		<form th:action="@{|/answer/create/${question.id}|}" method="post" th:object="${answerForm}">
 			<div th:replace="~{form_errors}"></div>
-			<textarea th:field="*{content}" cols="30" rows="10" class="form-control"></textarea>
+			<textarea th:field="*{content}" cols="30" rows="10" class="form-control" sec:authorize="isAnonymous()" placeholder="로그인 후 사용이가능합니다" disabled></textarea> <!--게시판 못쓰게하는 시큐리티-->
+			<textarea th:field="*{content}" cols="30" rows="10" class="form-control" sec:authorize="isAuthenticated()"></textarea>
 			<input type="submit" value="답변 등록" class="btn btn-warning my-3" />
+			<a th:href="@{|/question/modify/${question.id}|}" class="btn btn-info" sec:authorize="isAuthenticated" th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}">수정</a>
+					<a href="javascript:void(0);" class="btn btn-danger delete"  sec:authorize="isAuthenticated" th:if="${question.author != null and #authentication.getPrincipal().getUsername() == question.author.username}"
+											th:data-uri="@{|/question/delete/${question.id}|}">삭제</a>
 		</form>
+	
+	
+			
+					
 	</div>
-
+	<script layout:fragment="script">
+		const delete_elements = document.getElementsByClassName("delete");
+		Array.from(delete_elements).forEach(function(element){
+			element.addEventListener("click",function(){
+				if(confirm("정말로 삭제하시겠습니까?")){
+						location.href = this.dataset.uri;
+					}
+			})
+		})
+	</script>
 
 </html>
