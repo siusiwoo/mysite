@@ -6,6 +6,15 @@
 			<div class="jumbotron">
 				<h1>질문 목록</h1>
 			</div>
+			<a th:href="@{/question/create}" class="btn btn-info my-3">질문 등록하기</a>
+			<div class="input-group">
+				<input type="text" id="search_kw" class="form-control" th:value="${kw}" />
+				<button class="btn btn-outline-secondary" type="button" id="btn-search">검색</button>
+			</div>
+			<form th:action="@{/question/list}" method="get" id="searchForm">
+				<input type="text" id="kw" name="kw" th:value="${kw}" />
+				<input type="text" id="page" name="page" th:value=" ${paging.number}" />
+			</form>
 			<a th:href="@{/question/create}" class="btn btn-success my-3">질문 등록하기</a>
 			<table class="table table-striped">
 				<thead>
@@ -19,10 +28,11 @@
 				<tbody>
 					<tr th:each="question, loop : ${paging}">
 						<td>[[${paging.getTotalElements - (paging.number * paging.size) - loop.index}]]</td>
-						
+
 						<td>
 							<a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}">db에 있는
-								제목</a><span class="text-danger badge bg-warninge" th:if="${#lists.size(question.answerList) > 0}">[[${#lists.size(question.answerList)}]]</span>
+								제목</a><span class="text-danger badge bg-warninge"
+								th:if="${#lists.size(question.answerList) > 0}">[[${#lists.size(question.answerList)}]]</span>
 						</td>
 						<td><span th:if="${question.author}" th:text="${question.author.username}"></span></td>
 						<td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
@@ -30,24 +40,44 @@
 				</tbody>
 			</table>
 			<!-- 페이징 처리시작-->
-			
-				<nav aria-label="Page navigation example" th:if="${!paging.isEmpty()}">
-				        <ul class="pagination justify-content-center">
-				            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled' : ''">
-				                <a class="page-link" th:href="@{|?page=${paging.number-1}|}">Previous</a>
-				            </li>
-				            
-				            <li class="page-item" th:classappend="${paging.number==page} ? 'active' : ''" th:each="page : ${#numbers.sequence(0, paging.totalPages-1)}" th:if="${page>=paging.number-2 and page<=paging.number+2}">
-				                <a class="page-link" th:href="@{|?page=${page}|}" th:text="${page}">0</a>
-				            </li>
-				            
-				            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled' : ''">
-				                <a class="page-link" th:href="@{|?page=${paging.number+1}|}">Next</a>
-				            </li>
-				        </ul>
-				    </nav>
-			
+
+			<nav aria-label="Page navigation example" th:if="${!paging.isEmpty()}">
+				<ul class="pagination justify-content-center">
+					<li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled' : ''">
+						<a class="page-link" th:data-page="@{page=${paging.number-1}}" href="javascript:void(0)">이전</a>
+					</li>
+
+					<li class="page-item" th:classappend="${paging.number==page} ? 'active' : ''"
+						th:each="page : ${#numbers.sequence(0, paging.totalPages-1)}"
+						th:if="${page>=paging.number-2 and page<=paging.number+2}">
+						<a class="page-link" th:data-page="@{page=${page}}" th:text="${page}"
+							href="javascript:void(0)">0</a>
+					</li>
+
+					<li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled' : ''">
+						<a class="page-link" th:data-page="@{page=${paging.number+1}}" href="javascript:void(0)">다음</a>
+					</li>
+				</ul>
+			</nav>
+
 		</div>
 	</div>
+	<script layout:fraggment="script">
+		const page_elements = document.getElementsByClassName("page-link");
+		Array.from(page_elements).forEach(function (element) {
+			element.addEventListener("click", function () {
+				document.getElementById("page").value = this.dataset.page;
+				document.getElementById("searchForm").submit();
+			})
+		})
+
+		const btn_search = document.getElementById("btn-search");
+		btn_search.addEventListener("click", function () {
+			document.getElementById("kw").value = document.getElementById("search_kw").value;
+			document.getElementById("page").value = 0;
+			document.getElementById("searchForm").submit();
+		})
+
+	</script>
 
 </html>

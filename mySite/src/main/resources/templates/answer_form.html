@@ -4,7 +4,7 @@
            <h5 class="border-bottom">답변 수정</h5>
            <form th:object="${answerForm}" method="post">
                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-               <div th:replace="~{form_errors :: formErrorFragment}"></div>
+               <div th:replace="~{form_errors :: formErrorsFragment}"></div>
                <div class="mb-3">
                    <label for="content" class="form-label">내용</label>
                    <textarea th:field="*{content}" class="form-control" rows="10"></textarea>

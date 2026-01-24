@@ -1,5 +1,6 @@
 package com.study.mySite.answer;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import com.study.mySite.question.Question;
 import com.study.mySite.user.SiteUser;
@@ -9,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,4 +35,7 @@ public class Answer {
 	private SiteUser author;
 	
 	private LocalDateTime modifyDate;
+	
+	@ManyToMany
+	Set<SiteUser> voter;
 }
