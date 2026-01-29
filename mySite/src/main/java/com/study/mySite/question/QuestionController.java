@@ -8,6 +8,8 @@ import org.springframework.data.repository.core.RepositoryCreationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -37,7 +39,11 @@ public class QuestionController {
 	private final UserService userService;
 
 	@GetMapping("/list")
-	public String list(Model model,@RequestParam(value="page",defaultValue="0") int page, @RequestParam(value="kw",defaultValue = "") String kw){
+	public String list(Model model,@RequestParam(value="page",defaultValue="0") int page, @RequestParam(value="kw",defaultValue = "") String kw,@AuthenticationPrincipal UserDetails userDetails){
+		if(userDetails != null) {
+			SiteUser user=userService.getUser(userDetails.getUsername());
+			model.addAttribute("profileImage",user.getImageUrl());
+		}
 		Page<Question> paging = this.questionService.getList(page, kw);
 		model.addAttribute("paging", paging);
 		model.addAttribute("kw", kw);

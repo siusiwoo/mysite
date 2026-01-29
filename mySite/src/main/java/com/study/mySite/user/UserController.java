@@ -6,6 +6,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,7 @@ public class UserController {
 	}
 	
 	@PostMapping("/signup")
-	public String signup(@Valid UserCreateForm userCreateForm,BindingResult bindingResult) {
+	public String signup(@Valid UserCreateForm userCreateForm,BindingResult bindingResult,@RequestParam("imageFile") MultipartFile imgFile) {
 		if(bindingResult.hasErrors()) {
 			return "signup_form";	
 		}
@@ -35,7 +37,9 @@ public class UserController {
 		try {
 			userService.create(userCreateForm.getUsername()
 			, userCreateForm.getEmail()
-			, userCreateForm.getPassword());
+			, userCreateForm.getPassword()
+			, imgFile
+			);
 			
 		}catch(DataIntegrityViolationException e) {
 			e.printStackTrace();
@@ -53,5 +57,5 @@ public class UserController {
 	@GetMapping("/login")
 	public String login(){
 		return "login_form";
-	}
+	} 
 }
