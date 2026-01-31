@@ -15,8 +15,8 @@
 					
 				</tr>
 			</thead>
-			<tbody class="talbe-body">
-				ajax로 가져온 데이터 출력
+			<tbody class="table-body">
+			
 			</tbody>
 		</table>
 	</div>
@@ -38,6 +38,21 @@
 						console.log("전체 데이터 : ",data)
 						const list = data.boxOfficeResult.dailyBoxOfficeList
 						console.log("전체 데이터 : ",list)
+						let str = "";
+						$.each(list, function(i,item){
+							str += `
+								<tr>
+									<td>${item.rank}</td>
+									<td>${item.movieNm}</td>
+									<td><img src="/imgs/movies/${item.movieCd}.jpg" alt="" /></td>
+									<td>${item.openDt}</td>
+									<td>${Number(item.audiAcc).toLocaleString()} 명</td>
+									<td>${Number(item.salesAcc).toLocaleString()} 원</td>
+								</tr>
+							`
+							$(".table-body").append(str); // 완성된 HTML 꽂아넣기 이렇게 데이터를 넣어서 사용할수도 있음  name은 백엔드를 적용시킬라면 써야함
+						})
+						
 					},
 					error : function(){
 						console.log("통신에러") 
